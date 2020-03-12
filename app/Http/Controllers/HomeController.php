@@ -21,8 +21,8 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $user)
+    public function index()
     {
-        return view('home',['user'=>$user]);
+        return view('home');
     }
 }

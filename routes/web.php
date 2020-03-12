@@ -17,12 +17,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home/{user}', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('login/facebook','Auth\LoginFacebookController@redirect');
 Route::get('login/facebook/callback', 'Auth\LoginFacebookController@callback');
 Route::get('login/google','Auth\LoginGoogleController@redirectToProvider');
-Route::get('login/google/callback','Auth\LoginGoogleController@handleProviderCallback');
+Route::get('callback','Auth\LoginGoogleController@handleProviderCallback');
 
 Route::get('auth/{provider}', 'Auth\LoginController@redirectToProvider');
 Route::get('auth/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
