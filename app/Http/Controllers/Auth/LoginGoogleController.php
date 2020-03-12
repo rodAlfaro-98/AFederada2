@@ -27,23 +27,26 @@ class LoginGoogleController extends Controller
     public function handleProviderCallback()
     {
         try{
-            $user = Socialite::driver('google')->user();
+            $user = Socialite::driver('google')->stateless()->user();
         } catch(\Exception $e){
-            return "Error";
+            return redirect()->to('/');
         }
-        $existingUser = User::find(['email',$user->email]);
+        $existingUser = User::where('email',$user->email)->first();
+        //return (array) $existingUser;
 
         if($existingUser){
-            //auth()->login($existingUser);
+            //return (array) $existingUser;
             DB::table('users')
                 ->where('email',$user->email)
                 ->update(['remember_token'=>$user->token]);
-            //auth()->login($existingUser);
+            auth()->login($existingUser, true);
         } else{
-            DB::table('users')
-                ->insert(['email'=>$user->email,'remember_token'=>$user->token]);
-            $existingUser = User::find($user->email);
-            //auth()->login($existingUser);
+            //return 'Non existing';
+            /*DB::table('users')
+                ->insert(['first_name'=>$user->given_name,'last_name'=>$user->family_name,'email'=>$user->email,'remember_token'=>$user->token]);
+            $existingUser = User::find(['email',$user->email]);
+            auth()->login($existingUser, true);*/
+            return redirect()->to('/');
         }
         
         return redirect()->to('/home');
