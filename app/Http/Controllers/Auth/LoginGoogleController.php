@@ -32,7 +32,11 @@ class LoginGoogleController extends Controller
             return redirect()->to('/');
         }
         $existingUser = User::where('email',$user->email)->first();
-        //return (array) $existingUser;
+        if($user->nickname){
+            $nickname=$user->nickname;
+        }else{
+            $nickname=$user->name;
+        }
 
         if($existingUser){
             //return (array) $existingUser;
@@ -42,16 +46,14 @@ class LoginGoogleController extends Controller
             auth()->login($existingUser, true);
         } else{
             //return 'Non existing';
-            /*DB::table('users')
-                ->insert(['first_name'=>$user->given_name,'last_name'=>$user->family_name,'email'=>$user->email,'remember_token'=>$user->token]);
-            $existingUser = User::find(['email',$user->email]);
-            auth()->login($existingUser, true);*/
-            return redirect()->to('/');
+            DB::table('users')
+                ->insert(['first_name'=>$user->name,'last_name'=>"",'username'=>$nickname,'email'=>$user->email,'remember_token'=>$user->token]);
+                $existingUser = User::where('email',$user->email)->first();
+            auth()->login($existingUser, true);
         }
         
         return redirect()->to('/home');
 
         //return redirect()->route('home',['user'=>$user]);
-        // $user->token;
     }
 }
